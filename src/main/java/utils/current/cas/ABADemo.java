@@ -14,7 +14,7 @@ public class ABADemo {
     private static AtomicReference<Integer> atomicReference = new AtomicReference<>(100);
     private static AtomicStampedReference<Integer> stampedReference = new AtomicStampedReference<>(100, 1);
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws InterruptedException {
         System.out.println("===以下是ABA问题的产生===");
         new Thread(() -> {
             atomicReference.compareAndSet(100, 101);
@@ -35,6 +35,8 @@ public class ABADemo {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        TimeUnit.SECONDS.sleep(4);
         System.out.println("===以下是ABA问题的解决===");
 
         new Thread(() -> {
