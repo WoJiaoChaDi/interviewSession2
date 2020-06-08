@@ -22,18 +22,18 @@ public class ContainerNotSafeDemo {
      * 这样的好处是可以对copyOnWrite容器进行并发的读,而不需要加锁 因为当前容器不会添加任何容器.所以copyOnwrite容器也是一种
      * 读写分离的思想,读和写不同的容器.
      * public boolean add(E e) {
-     * final ReentrantLock lock = this.lock;
-     * lock.lock();
-     * try {
-     * Object[] elements = getArray();
-     * int len = elements.length;
-     * Object[] newElements = Arrays.copyOf(elements, len + 1);
-     * newElements[len] = e;
-     * setArray(newElements);
-     * return true;
-     * } finally {
-     * lock.unlock();
-     * }
+     *      final ReentrantLock lock = this.lock;
+     *      lock.lock();
+     *      try {
+     *          Object[] elements = getArray();
+     *          int len = elements.length;
+     *          Object[] newElements = Arrays.copyOf(elements, len + 1);
+     *          newElements[len] = e;
+     *          setArray(newElements);
+     *          return true;
+     *      } finally {
+     *          lock.unlock();
+     *      }
      * }
      *
      * @param args
