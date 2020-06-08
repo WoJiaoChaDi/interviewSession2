@@ -2,7 +2,7 @@ package utils.current;
 
 public class SingletonDemo1 {
 
-    private static volatile SingletonDemo1 instance=null;
+    private static SingletonDemo1 instance=null;
     private SingletonDemo1(){
         System.out.println(Thread.currentThread().getName()+"\t 构造方法");
     }
