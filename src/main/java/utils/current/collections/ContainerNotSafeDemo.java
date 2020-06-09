@@ -1,9 +1,15 @@
 package utils.current.collections;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CopyOnWriteArrayList;
+import java.util.concurrent.CopyOnWriteArraySet;
 
 /**
  * Description: 集合类不安全的问题
@@ -38,13 +44,11 @@ public class ContainerNotSafeDemo {
      */
     public static void main(String[] args) {
 
-        List<String> list = new ArrayList<>();
-        for (int i = 1; i <= 30; i++) {
-            new Thread(() -> {
-                list.add(UUID.randomUUID().toString().substring(1, 8));
-                System.out.println(list);
-            }, String.valueOf(i)).start();
-        }
+        //NotSafeArryList();
+
+        //NotSafeHashSet();
+
+        //NotSafeHashMap();
 
         //并发修改异常
         //Exception in thread "22" java.util.ConcurrentModificationException
@@ -66,11 +70,71 @@ public class ContainerNotSafeDemo {
          * 4.优化建议（同样的错误不犯两次）
          */
 
-        List<String> list2 = new CopyOnWriteArrayList<>();
+
+        //SafeArrayList();
+
+        //SafeArraySet();
+
+        SafeConcurrentHashMap();
+
+    }
+
+    private static void SafeConcurrentHashMap() {
+        Map<String, String> map = new ConcurrentHashMap<>();
         for (int i = 1; i <= 30; i++) {
             new Thread(() -> {
-                list2.add(UUID.randomUUID().toString().substring(1, 8));
-                System.out.println(list2);
+                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(map);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+    private static void SafeArraySet() {
+        Set<String> set = new CopyOnWriteArraySet<>();
+        for (int i = 1; i <= 30; i++) {
+            new Thread(() -> {
+                set.add(UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(set);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+    private static void SafeArrayList() {
+        List<String> list = new CopyOnWriteArrayList<>();
+        for (int i = 1; i <= 30; i++) {
+            new Thread(() -> {
+                list.add(UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(list);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+    private static void NotSafeHashMap() {
+        Map<String, String> map = new HashMap<>();
+        for (int i = 1; i <= 30; i++) {
+            new Thread(() -> {
+                map.put(Thread.currentThread().getName(), UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(map);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+    private static void NotSafeHashSet() {
+        Set<String> set = new HashSet<>();
+        for (int i = 1; i <= 30; i++) {
+            new Thread(() -> {
+                set.add(UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(set);
+            }, String.valueOf(i)).start();
+        }
+    }
+
+    private static void NotSafeArryList() {
+        List<String> list = new ArrayList<>();
+        for (int i = 1; i <= 30; i++) {
+            new Thread(() -> {
+                list.add(UUID.randomUUID().toString().substring(1, 8));
+                System.out.println(list);
             }, String.valueOf(i)).start();
         }
     }
