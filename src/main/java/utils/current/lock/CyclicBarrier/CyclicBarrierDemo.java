@@ -14,7 +14,9 @@ public class CyclicBarrierDemo {
             new Thread(() -> {
                 System.out.println(Thread.currentThread().getName() + "\t 收集到第" + temp + "颗龙珠");
                 try {
+                    //线程都等待在此处等待，直到达到CyclicBarrier的数量后，才放行
                     cyclicBarrier.await();
+
                     System.out.println(temp+"号龙珠");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
