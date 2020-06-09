@@ -3,30 +3,49 @@ package utils.current.lock.ReadWriteLock;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.ReentrantReadWriteLock;
 
 class MyCache//资源类
 {
     private volatile Map<String, Object> map = new HashMap<>();
+    private ReentrantReadWriteLock rwLock = new ReentrantReadWriteLock();
 
     public void put(String key, Object value) {
-        System.out.println(Thread.currentThread().getName() + "\t 正在写入" + key);
 
-        //暂停一会儿线程吗，模拟网络拥堵
-        try { TimeUnit.MILLISECONDS.sleep(300); } catch (InterruptedException e) { e.printStackTrace(); }
+        rwLock.writeLock().lock();
 
-        map.put(key, value);
-        System.out.println(Thread.currentThread().getName() + "\t 写入完成" + key);
+        try {
+            System.out.println(Thread.currentThread().getName() + "\t 正在写入" + key);
+
+            //暂停一会儿线程吗，模拟网络拥堵
+            try { TimeUnit.MILLISECONDS.sleep(300); } catch (InterruptedException e) { e.printStackTrace(); }
+
+            map.put(key, value);
+            System.out.println(Thread.currentThread().getName() + "\t 写入完成" + key);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            rwLock.writeLock().unlock();
+        }
     }
 
     public void get(String key) {
 
-        System.out.println(Thread.currentThread().getName() + "\t 正在读取：");
+        rwLock.readLock().lock();
 
-        //暂停一会儿线程吗，模拟网络拥堵
-        try { TimeUnit.MILLISECONDS.sleep(300); } catch (InterruptedException e) { e.printStackTrace(); }
+        try {
+            System.out.println(Thread.currentThread().getName() + "\t 正在读取：");
 
-        Object result = map.get(key);
-        System.out.println(Thread.currentThread().getName() + "\t 读取完成" + result);
+            //暂停一会儿线程吗，模拟网络拥堵
+            try { TimeUnit.MILLISECONDS.sleep(300); } catch (InterruptedException e) { e.printStackTrace(); }
+
+            Object result = map.get(key);
+            System.out.println(Thread.currentThread().getName() + "\t 读取完成" + result);
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            rwLock.readLock().unlock();
+        }
     }
 }
 
@@ -79,5 +98,27 @@ public class ReadWriteLockDemo {
         //4	 读取完成4
         //0	 读取完成0
         //3	 读取完成3
+
+        //添加读写锁后的输出
+        //1	 正在写入1
+        //1	 写入完成1
+        //2	 正在写入2
+        //2	 写入完成2
+        //0	 正在写入0
+        //0	 写入完成0
+        //4	 正在写入4
+        //4	 写入完成4
+        //3	 正在写入3
+        //3	 写入完成3
+        //1	 正在读取：
+        //0	 正在读取：
+        //3	 正在读取：
+        //4	 正在读取：
+        //2	 正在读取：
+        //1	 读取完成1
+        //0	 读取完成0
+        //2	 读取完成2
+        //3	 读取完成3
+        //4	 读取完成4
     }
 }
