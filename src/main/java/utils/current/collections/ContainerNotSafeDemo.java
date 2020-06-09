@@ -1,7 +1,5 @@
 package utils.current.collections;
 
-import org.junit.Test;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -75,13 +73,5 @@ public class ContainerNotSafeDemo {
                 System.out.println(list2);
             }, String.valueOf(i)).start();
         }
-    }
-
-    /**
-     * ArrayList线程不安全的例子
-     */
-    @Test
-    public void test1(){
-
     }
 }
