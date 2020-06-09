@@ -1,4 +1,4 @@
-package utils.current.reenter.test2;
+package utils.current.lock.reenterLock.test2;
 
 import lombok.SneakyThrows;
 

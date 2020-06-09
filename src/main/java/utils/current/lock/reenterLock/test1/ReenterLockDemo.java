@@ -1,4 +1,4 @@
-package utils.current.reenter.test1;
+package utils.current.lock.reenterLock.test1;
 
 import java.util.concurrent.TimeUnit;
 
