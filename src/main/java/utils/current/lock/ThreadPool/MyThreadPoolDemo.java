@@ -2,17 +2,47 @@ package utils.current.lock.ThreadPool;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.LinkedBlockingQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 4种获取java多线程的方式
- *  Thread
- *  Runnable
- *  Callable
- *  线程池
+ * Thread
+ * Runnable
+ * Callable
+ * 线程池
  */
 public class MyThreadPoolDemo {
     public static void main(String[] args) {
 
+        //JDK提供的线程池
+        //executorsPool();
+
+        //手写线程池(默认线程池大小2， 最大线程池大小5个， 超时1， 单位秒， 默认的线程池队列， 默认的拒绝策略)
+        ExecutorService threadPool = new ThreadPoolExecutor(2, 5,
+                                                                1L, TimeUnit.SECONDS,
+                                                                new LinkedBlockingQueue<>(3),
+                                                                Executors.defaultThreadFactory(),
+                                                                new ThreadPoolExecutor.DiscardPolicy());
+
+        try {
+            //最大线程数 = 最大线程数 + 阻塞队列大小
+            for (int i = 1; i <= 15; i++) {
+                threadPool.execute(() -> {
+                    System.out.println(Thread.currentThread().getName() + "\t 办理业务");
+                });
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            threadPool.shutdown();
+        }
+
+    }
+
+    private static void executorsPool() {
         //查看底层cpu是多少线程
         System.out.println(Runtime.getRuntime().availableProcessors());
 
@@ -45,6 +75,5 @@ public class MyThreadPoolDemo {
             //关闭线程池
             threadPool.shutdown();
         }
-
     }
 }
