@@ -5,6 +5,10 @@ public class HelloGC {
 
         System.out.println("****Hello GC*****");
 
-        Thread.sleep(Integer.MAX_VALUE);
+        //Thread.sleep(Integer.MAX_VALUE);
+
+        //配置：-Xms10m -Xmx10m -XX:+PrintGCDetails
+        //直接将其撑爆
+        byte[] byteArray = new byte[50 * 1024 * 1024];
     }
 }
