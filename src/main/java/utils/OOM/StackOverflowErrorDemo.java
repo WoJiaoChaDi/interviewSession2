@@ -6,6 +6,7 @@ public class StackOverflowErrorDemo {
     }
 
     private static void stackOverflowError(){
+        //Exception in thread "main" java.lang.StackOverflowError
         stackOverflowError();
     }
 }
